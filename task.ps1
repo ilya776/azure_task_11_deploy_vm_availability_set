@@ -9,7 +9,7 @@ $vmImage = "Ubuntu2204"
 $vmSize = "Standard_B1s"
 $availabilitySetName = "mateavalset"
 
-# Ідeмпотентне створення availability set
+# Перевірка та створення availability set (ідемпотентно)
 $avSet = Get-AzAvailabilitySet -ResourceGroupName $resourceGroupName -Name $availabilitySetName -ErrorAction SilentlyContinue
 if (-not $avSet) {
     Write-Host "Creating availability set $availabilitySetName ..."
@@ -24,7 +24,7 @@ if (-not $avSet) {
     Write-Host "Availability set $availabilitySetName already exists."
 }
 
-# Створюємо дві VM з посиланням на існуючі ресурси, без публічних IP
+# Створення двох VM без публічного IP
 for ($i=1; $i -le 2; $i++) {
     $vmName = "$vmBaseName$i"
     Write-Host "Creating VM $vmName ..."
@@ -39,5 +39,5 @@ for ($i=1; $i -le 2; $i++) {
       -SecurityGroupName $networkSecurityGroupName `
       -SshKeyName $sshKeyName `
       -AvailabilitySetName $availabilitySetName `
-      -PublicIpAddress $null
+      -PublicIpAddressName ''
 }
